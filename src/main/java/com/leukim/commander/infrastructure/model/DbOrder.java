@@ -1,0 +1,86 @@
+package com.leukim.commander.infrastructure.model;
+
+import jakarta.persistence.*;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+@Entity
+public final class DbOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String name;
+    @OneToMany(mappedBy = "order")
+    private List<DbProductQuantity> items;
+    private boolean picked;
+
+    public DbOrder() {
+    }
+
+    public DbOrder(UUID id, String name, List<DbProductQuantity> items, boolean picked) {
+        this.id = id;
+        this.name = name;
+        this.items = items;
+        this.picked = picked;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<DbProductQuantity> getItems() {
+        return items;
+    }
+
+    public void setItems(List<DbProductQuantity> items) {
+        this.items = items;
+    }
+
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (DbOrder) obj;
+        return Objects.equals(this.id, that.id) &&
+                Objects.equals(this.name, that.name) &&
+                Objects.equals(this.items, that.items) &&
+                this.picked == that.picked;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, items, picked);
+    }
+
+    @Override
+    public String toString() {
+        return "DbOrder[" +
+                "id=" + id + ", " +
+                "name=" + name + ", " +
+                "items=" + items + ", " +
+                "picked=" + picked + ']';
+    }
+
+}
