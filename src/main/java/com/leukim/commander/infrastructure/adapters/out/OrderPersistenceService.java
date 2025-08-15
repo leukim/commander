@@ -43,4 +43,9 @@ public class OrderPersistenceService implements OrderPersistencePort {
     public void delete(UUID id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

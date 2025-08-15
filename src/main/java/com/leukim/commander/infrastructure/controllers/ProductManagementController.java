@@ -47,6 +47,9 @@ public class ProductManagementController {
     @Operation(summary = "Delete a product", description = "Deletes a product by its unique identifier.")
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable UUID id) {
+        if (useCase.findById(id).isEmpty()) {
+            throw new ProductNotFoundException(id);
+        }
         useCase.remove(id);
     }
 }

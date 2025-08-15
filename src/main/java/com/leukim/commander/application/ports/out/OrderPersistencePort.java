@@ -14,4 +14,6 @@ public interface OrderPersistencePort {
     Order save(Order order);
 
     void delete(UUID id);
+
+    void deleteAll();
 }

@@ -31,9 +31,9 @@ class ProductManagementControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         productsPersistencePort.deleteAll();
-        productsPersistencePort.save(PRODUCT_1);
+        Product save = productsPersistencePort.save(PRODUCT_1);
 
-        this.productId = productsPersistencePort.getAll().getFirst().id();
+        this.productId = save.id();
     }
 
     @Test
