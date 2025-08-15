@@ -3,6 +3,7 @@ package com.leukim.commander.infrastructure.controllers;
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
+import com.leukim.commander.infrastructure.controllers.exception.ProductNotFoundException;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ public class ProductManagementController {
 
     @Operation(summary = "Add a new product", description = "Creates a new product with the provided details.")
     @PostMapping()
-    public ProductDto add(CreateProductDto createProductDto) {
+    public ProductDto add(@RequestBody CreateProductDto createProductDto) {
         Product createdProduct = useCase.create(createProductDto);
         return mapper.toDto(createdProduct);
     }
@@ -40,7 +41,7 @@ public class ProductManagementController {
     public ProductDto getById(@PathVariable UUID id) {
         return useCase.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Operation(summary = "Delete a product", description = "Deletes a product by its unique identifier.")
