@@ -14,4 +14,6 @@ public interface ProductsPersistencePort {
     Product save(Product entity);
 
     void delete(UUID id);
+
+    void deleteAll();
 }

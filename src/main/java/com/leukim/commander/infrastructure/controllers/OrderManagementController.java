@@ -2,6 +2,7 @@ package com.leukim.commander.infrastructure.controllers;
 
 import com.leukim.commander.application.ports.in.OrderManagementUseCase;
 import com.leukim.commander.application.ports.in.model.CreateOrderDto;
+import com.leukim.commander.infrastructure.controllers.exception.OrderNotFoundException;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
 import com.leukim.commander.infrastructure.mappers.OrderMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,12 +39,15 @@ public class OrderManagementController {
     public OrderDto getById(@PathVariable UUID id) {
         return useCase.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + id));
+                .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     @Operation(summary = "Delete an order", description = "Deletes an order by its unique identifier.")
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable UUID id) {
+        if (useCase.findById(id).isEmpty()) {
+            throw new OrderNotFoundException(id);
+        }
         useCase.remove(id);
     }
 }
