@@ -20,8 +20,7 @@ import static com.leukim.commander.assertions.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrderManagementControllerIntegrationTest {
-    private static Order ORDER_1 = new Order(null, "TestOrder", Map.of(), false);
-    // TODO Add picked order
+    private static final Order ORDER_1 = new Order(null, "TestOrder", Map.of(), false);
 
     private UUID orderId;
 
@@ -94,3 +93,4 @@ class OrderManagementControllerIntegrationTest {
         assertThat(response.getBody()).contains(orderId.toString());
     }
 }
+
