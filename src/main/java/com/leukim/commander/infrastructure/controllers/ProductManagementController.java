@@ -2,12 +2,14 @@ package com.leukim.commander.infrastructure.controllers;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
+import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("/api/products")
@@ -28,29 +30,22 @@ public class ProductManagementController {
 
     @Operation(summary = "Add a new product", description = "Creates a new product with the provided details.")
     @PostMapping()
-    public ProductDto add(ProductDto productDto) {
-        Product createdProduct = useCase.add(mapper.fromDto(productDto));
+    public ProductDto add(CreateProductDto createProductDto) {
+        Product createdProduct = useCase.create(createProductDto);
         return mapper.toDto(createdProduct);
     }
 
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its unique identifier.")
     @GetMapping("/{id}")
-    public ProductDto getById(@PathVariable String id) {
+    public ProductDto getById(@PathVariable UUID id) {
         return useCase.findById(id)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
 
-    @Operation(summary = "Update an existing product", description = "Updates the details of an existing product.")
-    @PutMapping("/{id}")
-    public ProductDto update(@PathVariable String id, @RequestBody ProductDto productDto) {
-        // TODO validate id is not modified
-        return mapper.toDto(useCase.update(mapper.fromDto(productDto)));
-    }
-
     @Operation(summary = "Delete a product", description = "Deletes a product by its unique identifier.")
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable String id) {
+    public void deleteProduct(@PathVariable UUID id) {
         useCase.remove(id);
     }
 }

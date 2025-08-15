@@ -2,18 +2,23 @@ package com.leukim.commander.infrastructure.adapters.in;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
+import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.application.ports.out.ProductsPersistencePort;
+import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService implements ProductManagementUseCase {
     private final ProductsPersistencePort persistencePort;
+    private final ProductMapper mapper;
 
-    public ProductService(ProductsPersistencePort persistencePort) {
+    public ProductService(ProductsPersistencePort persistencePort, ProductMapper mapper) {
         this.persistencePort = persistencePort;
+        this.mapper = mapper;
     }
 
     @Override
@@ -22,22 +27,18 @@ public class ProductService implements ProductManagementUseCase {
     }
 
     @Override
-    public Optional<Product> findById(String id) {
+    public Optional<Product> findById(UUID id) {
         return persistencePort.findById(id);
     }
 
     @Override
-    public Product add(Product entity) {
-        return persistencePort.save(entity);
+    public Product create(CreateProductDto createProductDto) {
+        Product product = mapper.create(createProductDto);
+        return persistencePort.save(product);
     }
 
     @Override
-    public Product update(Product entity) {
-        return persistencePort.save(entity);
-    }
-
-    @Override
-    public void remove(String id) {
+    public void remove(UUID id) {
         persistencePort.delete(id);
     }
 }

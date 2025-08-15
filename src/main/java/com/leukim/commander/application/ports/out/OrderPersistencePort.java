@@ -11,7 +11,7 @@ public interface OrderPersistencePort {
 
     Optional<Order> findById(UUID id);
 
-    Order create(Order order);
+    Order save(Order order);
 
     void delete(UUID id);
 }

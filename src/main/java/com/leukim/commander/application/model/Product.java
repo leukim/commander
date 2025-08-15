@@ -1,4 +1,6 @@
 package com.leukim.commander.application.model;
 
-public record Product(String id, String name, String description) {
+import java.util.UUID;
+
+public record Product(UUID id, String name, String description) {
 }

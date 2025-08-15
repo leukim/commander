@@ -34,7 +34,7 @@ public class OrderService implements OrderManagementUseCase {
     @Override
     public Order create(CreateOrderDto createOrderDto) {
         Order order = mapper.create(createOrderDto);
-        return persistencePort.create(order);
+        return persistencePort.save(order);
     }
 
     @Override

@@ -1,18 +1,18 @@
 package com.leukim.commander.application.ports.in;
 
 import com.leukim.commander.application.model.Product;
+import com.leukim.commander.application.ports.in.model.CreateProductDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ProductManagementUseCase {
     List<Product> getAll();
 
-    Optional<Product> findById(String id);
+    Optional<Product> findById(UUID id);
 
-    Product add(Product entity);
+    Product create(CreateProductDto createProductDto);
 
-    Product update(Product entity);
-
-    void remove(String id);
+    void remove(UUID id);
 }

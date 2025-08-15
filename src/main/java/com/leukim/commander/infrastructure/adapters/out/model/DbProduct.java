@@ -1,33 +1,35 @@
-package com.leukim.commander.infrastructure.model;
+package com.leukim.commander.infrastructure.adapters.out.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public final class DbProduct {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String description;
-    private DbUnitOfMeasure uom;
 
     public DbProduct() {
     }
 
-    public DbProduct(String id, String name, String description, DbUnitOfMeasure uom) {
+    public DbProduct(UUID id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.uom = uom;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -45,14 +47,6 @@ public final class DbProduct {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public DbUnitOfMeasure getUom() {
-        return uom;
-    }
-
-    public void setUom(DbUnitOfMeasure uom) {
-        this.uom = uom;
     }
 
     @Override
