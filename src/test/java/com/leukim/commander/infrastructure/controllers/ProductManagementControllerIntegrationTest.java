@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -79,5 +81,13 @@ class ProductManagementControllerIntegrationTest {
 
         ResponseEntity<String> response = restTemplate.getForEntity("/api/products/" + productId, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void deleteProduct_notFound_returns404() {
+        UUID randomId = UUID.randomUUID();
+        ResponseEntity<String> response = restTemplate.exchange("/api/products/" + randomId, HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).contains(randomId.toString());
     }
 }
