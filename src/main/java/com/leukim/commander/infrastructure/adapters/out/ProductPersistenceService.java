@@ -2,11 +2,13 @@ package com.leukim.commander.infrastructure.adapters.out;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.out.ProductsPersistencePort;
+import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -27,18 +29,18 @@ public class ProductPersistenceService implements ProductsPersistencePort {
     }
 
     @Override
-    public Optional<Product> findById(String id) {
+    public Optional<Product> findById(UUID id) {
         return repository.findById(id).map(mapper::fromDbModel);
     }
 
     @Override
     public Product save(Product entity) {
-        repository.save(mapper.toDbModel(entity));
-        return entity;
+        DbProduct createdProduct = repository.save(mapper.toDbModel(entity));
+        return mapper.fromDbModel(createdProduct);
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 }

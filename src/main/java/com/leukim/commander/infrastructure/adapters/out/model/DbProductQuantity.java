@@ -1,15 +1,13 @@
-package com.leukim.commander.infrastructure.model;
+package com.leukim.commander.infrastructure.adapters.out.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 public final class DbProductQuantity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

@@ -1,4 +1,4 @@
-package com.leukim.commander.infrastructure.model;
+package com.leukim.commander.infrastructure.adapters.out.model;
 
 import jakarta.persistence.*;
 

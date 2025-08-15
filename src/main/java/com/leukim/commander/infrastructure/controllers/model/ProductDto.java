@@ -2,12 +2,14 @@ package com.leukim.commander.infrastructure.controllers.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.UUID;
+
 public record ProductDto(
         @Schema(
                 description = "Unique identifier of the product",
-                example = "ASD123"
+                example = "123e4567-e89b-12d3-a456-426614174000"
         )
-        String id,
+        UUID id,
         @Schema(
                 description = "Name of the product",
                 example = "Apple Juice"

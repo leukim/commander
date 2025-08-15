@@ -1,7 +1,9 @@
 package com.leukim.commander.infrastructure.adapters.out;
 
-import com.leukim.commander.infrastructure.model.DbProduct;
+import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ProductRepository extends CrudRepository<DbProduct, String> {
+import java.util.UUID;
+
+public interface ProductRepository extends CrudRepository<DbProduct, UUID> {
 }

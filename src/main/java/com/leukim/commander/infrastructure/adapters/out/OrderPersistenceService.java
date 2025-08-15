@@ -1,10 +1,9 @@
 package com.leukim.commander.infrastructure.adapters.out;
 
 import com.leukim.commander.application.model.Order;
-import com.leukim.commander.application.ports.in.model.CreateOrderDto;
 import com.leukim.commander.application.ports.out.OrderPersistencePort;
 import com.leukim.commander.infrastructure.mappers.OrderMapper;
-import com.leukim.commander.infrastructure.model.DbOrder;
+import com.leukim.commander.infrastructure.adapters.out.model.DbOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class OrderPersistenceService implements OrderPersistencePort {
     }
 
     @Override
-    public Order create(Order order) {
+    public Order save(Order order) {
         DbOrder savedOrder = repository.save(mapper.toDbModel(order));
         return mapper.fromDbModel(savedOrder);
     }
