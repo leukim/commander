@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.leukim.commander.assertions.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ProductManagementControllerIntegrationTest {
@@ -39,23 +39,10 @@ class ProductManagementControllerIntegrationTest {
     @Test
     void getAllProducts_returnsProductList_fromPersistenceLayer() {
         ProductDto[] products = restTemplate.getForEntity("/api/products", ProductDto[].class).getBody();
-
         assertThat(products).hasSize(1);
-        assertThat(products[0].id()).isEqualTo(productId);
-        assertThat(products[0].name()).isEqualTo(PRODUCT_1.name());
-        assertThat(products[0].description()).isEqualTo(PRODUCT_1.description());
-    }
-
-    @Test
-    void getProductById_returnsProduct() {
-        ResponseEntity<ProductDto> response = restTemplate.getForEntity("/api/products/" + productId, ProductDto.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        ProductDto product = response.getBody();
-        assertThat(product).isNotNull();
-        assertThat(product.id()).isEqualTo(productId);
-        assertThat(product.name()).isEqualTo(PRODUCT_1.name());
-        assertThat(product.description()).isEqualTo(PRODUCT_1.description());
+        assertThat(products[0])
+            .hasName(PRODUCT_1.name())
+            .hasDescription(PRODUCT_1.description());
     }
 
     @Test
@@ -63,12 +50,19 @@ class ProductManagementControllerIntegrationTest {
         CreateProductDto createProductDto = new CreateProductDto("NewProduct", "NewDescription");
         ResponseEntity<ProductDto> response = restTemplate.postForEntity("/api/products", createProductDto, ProductDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+            .hasName("NewProduct")
+            .hasDescription("NewDescription");
+    }
 
-        ProductDto product = response.getBody();
-        assertThat(product).isNotNull();
-        assertThat(product.id()).isNotNull();
-        assertThat(product.name()).isEqualTo("NewProduct");
-        assertThat(product.description()).isEqualTo("NewDescription");
+    @Test
+    void getProductById_returnsProduct() {
+        ResponseEntity<ProductDto> response = restTemplate.getForEntity("/api/products/" + productId, ProductDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+            .hasId(productId)
+            .hasName(PRODUCT_1.name())
+            .hasDescription(PRODUCT_1.description());
     }
 
     @Test
