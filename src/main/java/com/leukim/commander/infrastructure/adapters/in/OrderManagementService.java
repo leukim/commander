@@ -12,11 +12,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class OrderService implements OrderManagementUseCase {
+public class OrderManagementService implements OrderManagementUseCase {
     private final OrderPersistencePort persistencePort;
     private final OrderMapper mapper;
 
-    public OrderService(OrderPersistencePort persistencePort, OrderMapper mapper) {
+    public OrderManagementService(OrderPersistencePort persistencePort, OrderMapper mapper) {
         this.persistencePort = persistencePort;
         this.mapper = mapper;
     }
