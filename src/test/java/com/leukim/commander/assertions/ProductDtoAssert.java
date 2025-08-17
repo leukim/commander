@@ -6,7 +6,7 @@ import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import java.util.UUID;
 import org.assertj.core.api.AbstractAssert;
 
-public class ProductDtoAssert
+public final class ProductDtoAssert
     extends AbstractAssert<ProductDtoAssert, ProductDto> {
     public ProductDtoAssert(ProductDto actual) {
         super(actual, ProductDtoAssert.class);

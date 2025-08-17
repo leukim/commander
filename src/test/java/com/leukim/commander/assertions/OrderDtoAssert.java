@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 import org.assertj.core.api.AbstractAssert;
 
-public class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
+public final class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
 
-    protected OrderDtoAssert(OrderDto actual) {
+    OrderDtoAssert(OrderDto actual) {
         super(actual, OrderDtoAssert.class);
     }
 
