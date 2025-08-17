@@ -1,10 +1,8 @@
 package com.leukim.commander.infrastructure.adapters.out.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,14 +13,10 @@ public final class DbProduct {
     private UUID id;
     private String name;
     private String description;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<DbProductQuantity> quantities;
 
     public DbProduct() {
-    }
-
-    public DbProduct(UUID id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
     }
 
     public UUID getId() {
@@ -47,6 +41,14 @@ public final class DbProduct {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<DbProductQuantity> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(List<DbProductQuantity> quantities) {
+        this.quantities = quantities;
     }
 
     @Override

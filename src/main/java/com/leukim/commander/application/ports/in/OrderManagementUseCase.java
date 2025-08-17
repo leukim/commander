@@ -2,6 +2,7 @@ package com.leukim.commander.application.ports.in;
 
 import com.leukim.commander.application.model.Order;
 import com.leukim.commander.application.ports.in.model.CreateOrderDto;
+import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,9 @@ public interface OrderManagementUseCase {
 
     Order create(CreateOrderDto createOrderDto);
 
-    // TODO Add/remove items to order
+    Order addItem(UUID orderId, AddOrderItemDto addOrderItemDto);
 
-    // TODO Pick up order
+    Order removeItem(UUID orderId, UUID productId);
 
     void remove(UUID id);
 }

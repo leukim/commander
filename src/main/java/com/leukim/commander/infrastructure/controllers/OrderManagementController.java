@@ -1,6 +1,8 @@
 package com.leukim.commander.infrastructure.controllers;
 
+import com.leukim.commander.application.model.Order;
 import com.leukim.commander.application.ports.in.OrderManagementUseCase;
+import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
 import com.leukim.commander.application.ports.in.model.CreateOrderDto;
 import com.leukim.commander.infrastructure.controllers.exception.OrderNotFoundException;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
@@ -42,9 +44,23 @@ public class OrderManagementController {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
+    @Operation(summary = "Add item to order", description = "Adds an item to the specified order.")
+    @PostMapping("/{orderId}/items")
+    public OrderDto addItem(@PathVariable UUID orderId, @RequestBody AddOrderItemDto addOrderItemDto) {
+        Order order = useCase.addItem(orderId, addOrderItemDto);
+        return mapper.toDto(order);
+    }
+
+    @Operation(summary = "Remove item from order", description = "Removes an item from the specified order.")
+    @DeleteMapping("/{orderId}/items/{productId}")
+    public OrderDto removeItem(@PathVariable UUID orderId, @PathVariable UUID productId) {
+        Order order = useCase.removeItem(orderId, productId);
+        return mapper.toDto(order);
+    }
+
     @Operation(summary = "Delete an order", description = "Deletes an order by its unique identifier.")
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable UUID id) {
+    public void deleteOrder(@PathVariable UUID id) {
         if (useCase.findById(id).isEmpty()) {
             throw new OrderNotFoundException(id);
         }
