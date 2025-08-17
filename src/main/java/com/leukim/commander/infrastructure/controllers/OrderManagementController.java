@@ -8,18 +8,24 @@ import com.leukim.commander.infrastructure.controllers.exception.OrderNotFoundEx
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
 import com.leukim.commander.infrastructure.mappers.OrderMapper;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/orders")
-public class OrderManagementController {
+public final class OrderManagementController {
     private final OrderManagementUseCase useCase;
     private final OrderMapper mapper;
 
-    public OrderManagementController(OrderManagementUseCase useCase, OrderMapper mapper) {
+    public OrderManagementController(OrderManagementUseCase useCase,
+                                     OrderMapper mapper) {
         this.useCase = useCase;
         this.mapper = mapper;
     }
@@ -40,20 +46,22 @@ public class OrderManagementController {
     @GetMapping("/{id}")
     public OrderDto getById(@PathVariable UUID id) {
         return useCase.findById(id)
-                .map(mapper::toDto)
-                .orElseThrow(() -> new OrderNotFoundException(id));
+            .map(mapper::toDto)
+            .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
     @Operation(summary = "Add item to order", description = "Adds an item to the specified order.")
     @PostMapping("/{orderId}/items")
-    public OrderDto addItem(@PathVariable UUID orderId, @RequestBody AddOrderItemDto addOrderItemDto) {
+    public OrderDto addItem(@PathVariable UUID orderId,
+                            @RequestBody AddOrderItemDto addOrderItemDto) {
         Order order = useCase.addItem(orderId, addOrderItemDto);
         return mapper.toDto(order);
     }
 
     @Operation(summary = "Remove item from order", description = "Removes an item from the specified order.")
     @DeleteMapping("/{orderId}/items/{productId}")
-    public OrderDto removeItem(@PathVariable UUID orderId, @PathVariable UUID productId) {
+    public OrderDto removeItem(@PathVariable UUID orderId,
+                               @PathVariable UUID productId) {
         Order order = useCase.removeItem(orderId, productId);
         return mapper.toDto(order);
     }

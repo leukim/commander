@@ -1,12 +1,11 @@
 package com.leukim.commander.assertions;
 
-import com.leukim.commander.infrastructure.controllers.model.OrderDto;
-import org.assertj.core.api.AbstractAssert;
+import static com.leukim.commander.assertions.Assertions.assertThat;
 
+import com.leukim.commander.infrastructure.controllers.model.OrderDto;
 import java.util.Map;
 import java.util.UUID;
-
-import static com.leukim.commander.assertions.Assertions.assertThat;
+import org.assertj.core.api.AbstractAssert;
 
 public class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
 
@@ -29,8 +28,8 @@ public class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
     public OrderDtoAssert hasItems(Map<UUID, Double> expectedItems) {
         isNotNull();
         assertThat(actual.items())
-                .hasSize(expectedItems.size())
-                .containsExactlyInAnyOrderEntriesOf(expectedItems);
+            .hasSize(expectedItems.size())
+            .containsExactlyInAnyOrderEntriesOf(expectedItems);
         return this;
     }
 

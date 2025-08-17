@@ -1,7 +1,11 @@
 package com.leukim.commander.infrastructure.adapters.out.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -52,7 +56,8 @@ public final class DbProductQuantity {
     public DbProductQuantity() {
     }
 
-    public DbProductQuantity(Long id, DbOrder order, DbProduct product, double quantity) {
+    public DbProductQuantity(Long id, DbOrder order, DbProduct product,
+                             double quantity) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -61,11 +66,15 @@ public final class DbProductQuantity {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         var that = (DbProductQuantity) obj;
-        return Objects.equals(this.product, that.product) &&
-                Double.doubleToLongBits(this.quantity) == Double.doubleToLongBits(that.quantity);
+        return Objects.equals(this.product, that.product)
+            && Double.doubleToLongBits(this.quantity) == Double.doubleToLongBits(that.quantity);
     }
 
     @Override
@@ -75,9 +84,9 @@ public final class DbProductQuantity {
 
     @Override
     public String toString() {
-        return "DbProductQuantity[" +
-                "product=" + product + ", " +
-                "quantity=" + quantity + ']';
+        return "DbProductQuantity["
+            + "product=" + product + ", "
+            + "quantity=" + quantity + ']';
     }
 
 

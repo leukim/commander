@@ -9,23 +9,26 @@ import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
 import com.leukim.commander.infrastructure.adapters.out.model.DbProductQuantity;
 import com.leukim.commander.infrastructure.mappers.OrderMapper;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
+import org.springframework.stereotype.Service;
 
 @Service
-public class OrderPersistenceService implements OrderPersistencePort {
+public final class OrderPersistenceService implements OrderPersistencePort {
     private final OrderMapper orderMapper;
     private final ProductMapper productMapper;
     private final OrderRepository repository;
     private final ProductRepository productRepository;
     private final DbProductQuantityRepository productQuantityRepository;
 
-    public OrderPersistenceService(OrderMapper orderMapper, ProductMapper productMapper, OrderRepository repository, ProductRepository productRepository, DbProductQuantityRepository productQuantityRepository) {
+    public OrderPersistenceService(OrderMapper orderMapper,
+                                   ProductMapper productMapper,
+                                   OrderRepository repository,
+                                   ProductRepository productRepository,
+                                   DbProductQuantityRepository productQuantityRepository) {
         this.orderMapper = orderMapper;
         this.productMapper = productMapper;
         this.repository = repository;
@@ -34,22 +37,24 @@ public class OrderPersistenceService implements OrderPersistencePort {
     }
 
     private List<Product> getAllProducts() {
-        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
-                .map(productMapper::fromDbModel)
-                .toList();
+        return StreamSupport.stream(productRepository.findAll().spliterator(),
+                false)
+            .map(productMapper::fromDbModel)
+            .toList();
     }
 
     @Override
     public List<Order> getAll() {
         return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .map((DbOrder dbOrder) -> orderMapper.fromDbModel(dbOrder, getAllProducts()))
-                .toList();
+            .map((DbOrder dbOrder) -> orderMapper.fromDbModel(dbOrder,
+                getAllProducts()))
+            .toList();
     }
 
     @Override
     public Optional<Order> findById(UUID id) {
         return repository.findById(id).map(
-                dbOrder -> orderMapper.fromDbModel(dbOrder, getAllProducts())
+            dbOrder -> orderMapper.fromDbModel(dbOrder, getAllProducts())
         );
     }
 
@@ -68,7 +73,8 @@ public class OrderPersistenceService implements OrderPersistencePort {
         DbOrder dbOrder = repository.findById(orderId).orElseThrow();
 
         DbProduct dbProduct = productMapper.toDbModel(product);
-        DbProductQuantity savedItem = productQuantityRepository.save(new DbProductQuantity(null, dbOrder, dbProduct, quantity));
+        DbProductQuantity savedItem = productQuantityRepository.save(
+            new DbProductQuantity(null, dbOrder, dbProduct, quantity));
 
         dbOrder.addItem(savedItem);
 
@@ -79,15 +85,15 @@ public class OrderPersistenceService implements OrderPersistencePort {
     public Order removeItem(Order order, UUID productId) {
         productQuantityRepository.deleteByProductId(productId);
         return new Order(
-                order.id(),
-                order.name(),
-                order.items().entrySet().stream()
-                                .filter(it -> !it.getKey().id().equals(productId))
-                                .collect(java.util.stream.Collectors.toMap(
-                                        Entry::getKey,
-                                        Entry::getValue
-                                )),
-                order.picked()
+            order.id(),
+            order.name(),
+            order.items().entrySet().stream()
+                .filter(it -> !it.getKey().id().equals(productId))
+                .collect(java.util.stream.Collectors.toMap(
+                    Entry::getKey,
+                    Entry::getValue
+                )),
+            order.picked()
         );
     }
 

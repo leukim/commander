@@ -5,18 +5,19 @@ import com.leukim.commander.application.ports.in.ProductManagementUseCase;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 @Service
-public class ProductManagementService implements ProductManagementUseCase {
+public final class ProductManagementService
+    implements ProductManagementUseCase {
     private final ProductPersistencePort persistencePort;
     private final ProductMapper mapper;
 
-    public ProductManagementService(ProductPersistencePort persistencePort, ProductMapper mapper) {
+    public ProductManagementService(ProductPersistencePort persistencePort,
+                                    ProductMapper mapper) {
         this.persistencePort = persistencePort;
         this.mapper = mapper;
     }

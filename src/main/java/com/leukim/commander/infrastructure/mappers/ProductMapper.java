@@ -14,5 +14,7 @@ public interface ProductMapper extends DtoMapper<ProductDto, Product> {
     Product create(CreateProductDto createProductDto);
 
     Product fromDbModel(DbProduct dbProduct);
+
+    @Mapping(target = "quantities", ignore = true)
     DbProduct toDbModel(Product product);
 }

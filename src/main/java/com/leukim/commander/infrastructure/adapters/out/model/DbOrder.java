@@ -1,7 +1,11 @@
 package com.leukim.commander.infrastructure.adapters.out.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -57,13 +61,17 @@ public final class DbOrder {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         var that = (DbOrder) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.name, that.name) &&
-                Objects.equals(this.items, that.items) &&
-                this.picked == that.picked;
+        return Objects.equals(this.id, that.id)
+            && Objects.equals(this.name, that.name)
+            && Objects.equals(this.items, that.items)
+            && this.picked == that.picked;
     }
 
     @Override
@@ -73,10 +81,10 @@ public final class DbOrder {
 
     @Override
     public String toString() {
-        return "DbOrder[" +
-                "id=" + id + ", " +
-                "name=" + name + ", " +
-                "items=" + items + ", " +
-                "picked=" + picked + ']';
+        return "DbOrder["
+            + "id=" + id + ", "
+            + "name=" + name + ", "
+            + "items=" + items + ", "
+            + "picked=" + picked + ']';
     }
 }

@@ -2,7 +2,6 @@ package com.leukim.commander.application.ports.in;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
