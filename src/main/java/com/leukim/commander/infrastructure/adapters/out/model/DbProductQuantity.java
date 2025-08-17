@@ -17,6 +17,22 @@ public final class DbProductQuantity {
     private DbProduct product;
     private double quantity;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DbOrder getOrder() {
+        return order;
+    }
+
+    public void setOrder(DbOrder order) {
+        this.order = order;
+    }
+
     public DbProduct getProduct() {
         return product;
     }
@@ -25,20 +41,22 @@ public final class DbProductQuantity {
         this.product = product;
     }
 
-    public DbProductQuantity() {
+    public double getQuantity() {
+        return quantity;
     }
 
-    public DbProductQuantity(DbProduct product, double quantity) {
-        this.product = product;
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
-    public DbProduct product() {
-        return product;
+    public DbProductQuantity() {
     }
 
-    public double quantity() {
-        return quantity;
+    public DbProductQuantity(Long id, DbOrder order, DbProduct product, double quantity) {
+        this.id = id;
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
     }
 
     @Override

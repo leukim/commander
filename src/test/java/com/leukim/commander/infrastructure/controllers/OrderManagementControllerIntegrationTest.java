@@ -1,8 +1,11 @@
 package com.leukim.commander.infrastructure.controllers;
 
 import com.leukim.commander.application.model.Order;
+import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateOrderDto;
+import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
 import com.leukim.commander.application.ports.out.OrderPersistencePort;
+import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,7 @@ import static com.leukim.commander.assertions.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrderManagementControllerIntegrationTest {
     private static final Order ORDER_1 = new Order(null, "TestOrder", Map.of(), false);
+    private static final Product PRODUCT_1 = new Product(null, "TestProduct", "TestDescription");
 
     private UUID orderId;
 
@@ -32,12 +36,20 @@ class OrderManagementControllerIntegrationTest {
     @Autowired
     private OrderPersistencePort persistencePort;
 
+    @Autowired
+    private ProductPersistencePort productPersistencePort;
+
+    private UUID productId;
+
     @BeforeEach
     void setUp() {
         persistencePort.deleteAll();
-        Order save = persistencePort.save(ORDER_1);
-
+        CreateOrderDto createOrderDto = new CreateOrderDto(ORDER_1.name());
+        Order save = persistencePort.create(createOrderDto);
         orderId = save.id();
+
+        Product product = productPersistencePort.save(PRODUCT_1);
+        productId = product.id();
     }
 
     @Test
@@ -102,5 +114,27 @@ class OrderManagementControllerIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).contains(randomId.toString());
     }
-}
 
+    @Test
+    void addItemToOrder_addsItemSuccessfully() {
+        AddOrderItemDto itemDto = new AddOrderItemDto(productId, 2);
+        ResponseEntity<OrderDto> response = restTemplate.postForEntity("/api/orders/" + orderId + "/items", itemDto, OrderDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+            .isNotNull()
+            .hasItems(Map.of(productId, 2.0));
+    }
+
+    @Test
+    void removeItemFromOrder_removesItemSuccessfully() {
+        // First add an item
+        AddOrderItemDto itemDto = new AddOrderItemDto(productId, 2);
+        restTemplate.postForEntity("/api/orders/" + orderId + "/items", itemDto, OrderDto.class);
+        // Now remove it
+        ResponseEntity<OrderDto> response = restTemplate.exchange("/api/orders/" + orderId + "/items/" + productId, HttpMethod.DELETE, HttpEntity.EMPTY, OrderDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+            .isNotNull()
+            .hasNoItems();
+    }
+}

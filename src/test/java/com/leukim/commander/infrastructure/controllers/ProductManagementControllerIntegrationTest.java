@@ -2,7 +2,7 @@ package com.leukim.commander.infrastructure.controllers;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
-import com.leukim.commander.application.ports.out.ProductsPersistencePort;
+import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,15 +25,15 @@ class ProductManagementControllerIntegrationTest {
     private UUID productId;
 
     @Autowired
-    private ProductsPersistencePort productsPersistencePort;
+    private ProductPersistencePort productPersistencePort;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @BeforeEach
     void setUp() {
-        productsPersistencePort.deleteAll();
-        Product save = productsPersistencePort.save(PRODUCT_1);
+        productPersistencePort.deleteAll();
+        Product save = productPersistencePort.save(PRODUCT_1);
 
         this.productId = save.id();
     }

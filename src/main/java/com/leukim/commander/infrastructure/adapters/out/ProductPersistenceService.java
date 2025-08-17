@@ -1,7 +1,7 @@
 package com.leukim.commander.infrastructure.adapters.out;
 
 import com.leukim.commander.application.model.Product;
-import com.leukim.commander.application.ports.out.ProductsPersistencePort;
+import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Service
-public class ProductPersistenceService implements ProductsPersistencePort {
+public class ProductPersistenceService implements ProductPersistencePort {
     private final ProductMapper mapper;
     private final ProductRepository repository;
 

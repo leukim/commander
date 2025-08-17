@@ -12,18 +12,11 @@ public final class DbOrder {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
     private List<DbProductQuantity> items;
     private boolean picked;
 
     public DbOrder() {
-    }
-
-    public DbOrder(UUID id, String name, List<DbProductQuantity> items, boolean picked) {
-        this.id = id;
-        this.name = name;
-        this.items = items;
-        this.picked = picked;
     }
 
     public UUID getId() {
@@ -44,6 +37,10 @@ public final class DbOrder {
 
     public List<DbProductQuantity> getItems() {
         return items;
+    }
+
+    public void addItem(DbProductQuantity item) {
+        this.items.add(item);
     }
 
     public void setItems(List<DbProductQuantity> items) {
@@ -82,5 +79,4 @@ public final class DbOrder {
                 "items=" + items + ", " +
                 "picked=" + picked + ']';
     }
-
 }

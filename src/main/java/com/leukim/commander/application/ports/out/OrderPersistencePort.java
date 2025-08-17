@@ -1,6 +1,8 @@
 package com.leukim.commander.application.ports.out;
 
 import com.leukim.commander.application.model.Order;
+import com.leukim.commander.application.model.Product;
+import com.leukim.commander.application.ports.in.model.CreateOrderDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +13,11 @@ public interface OrderPersistencePort {
 
     Optional<Order> findById(UUID id);
 
-    Order save(Order order);
+    Order create(CreateOrderDto createOrderDto);
+
+    Order addItem(UUID order, Product product, double quantity);
+
+    Order removeItem(Order order, UUID productId);
 
     void delete(UUID id);
 
