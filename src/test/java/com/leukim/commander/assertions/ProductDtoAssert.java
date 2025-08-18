@@ -1,13 +1,13 @@
 package com.leukim.commander.assertions;
 
-import com.leukim.commander.infrastructure.controllers.model.ProductDto;
-import org.assertj.core.api.AbstractAssert;
-
-import java.util.UUID;
-
 import static com.leukim.commander.assertions.Assertions.assertThat;
 
-public class ProductDtoAssert extends AbstractAssert<ProductDtoAssert, ProductDto> {
+import com.leukim.commander.infrastructure.controllers.model.ProductDto;
+import java.util.UUID;
+import org.assertj.core.api.AbstractAssert;
+
+public final class ProductDtoAssert
+    extends AbstractAssert<ProductDtoAssert, ProductDto> {
     public ProductDtoAssert(ProductDto actual) {
         super(actual, ProductDtoAssert.class);
     }

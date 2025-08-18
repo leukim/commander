@@ -1,16 +1,15 @@
 package com.leukim.commander.assertions;
 
-import com.leukim.commander.infrastructure.controllers.model.OrderDto;
-import org.assertj.core.api.AbstractAssert;
-
-import java.util.Map;
-import java.util.UUID;
-
 import static com.leukim.commander.assertions.Assertions.assertThat;
 
-public class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
+import com.leukim.commander.infrastructure.controllers.model.OrderDto;
+import java.util.Map;
+import java.util.UUID;
+import org.assertj.core.api.AbstractAssert;
 
-    protected OrderDtoAssert(OrderDto actual) {
+public final class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
+
+    OrderDtoAssert(OrderDto actual) {
         super(actual, OrderDtoAssert.class);
     }
 
@@ -29,8 +28,8 @@ public class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDto> {
     public OrderDtoAssert hasItems(Map<UUID, Double> expectedItems) {
         isNotNull();
         assertThat(actual.items())
-                .hasSize(expectedItems.size())
-                .containsExactlyInAnyOrderEntriesOf(expectedItems);
+            .hasSize(expectedItems.size())
+            .containsExactlyInAnyOrderEntriesOf(expectedItems);
         return this;
     }
 

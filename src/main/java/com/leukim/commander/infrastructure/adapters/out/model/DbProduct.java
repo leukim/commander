@@ -1,7 +1,11 @@
 package com.leukim.commander.infrastructure.adapters.out.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -53,12 +57,16 @@ public final class DbProduct {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
         var that = (DbProduct) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.name, that.name) &&
-                Objects.equals(this.description, that.description);
+        return Objects.equals(this.id, that.id)
+            && Objects.equals(this.name, that.name)
+            && Objects.equals(this.description, that.description);
     }
 
     @Override
@@ -68,10 +76,10 @@ public final class DbProduct {
 
     @Override
     public String toString() {
-        return "DbItemType[" +
-                "id=" + id + ", " +
-                "name=" + name + ", " +
-                "description=" + description + "]";
+        return "DbItemType["
+            + "id=" + id + ", "
+            + "name=" + name + ", "
+            + "description=" + description + "]";
     }
 
 }

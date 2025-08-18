@@ -4,19 +4,19 @@ import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
+import org.springframework.stereotype.Service;
 
 @Service
-public class ProductPersistenceService implements ProductPersistencePort {
+public final class ProductPersistenceService implements ProductPersistencePort {
     private final ProductMapper mapper;
     private final ProductRepository repository;
 
-    public ProductPersistenceService(ProductMapper mapper, ProductRepository repository) {
+    public ProductPersistenceService(ProductMapper mapper,
+                                     ProductRepository repository) {
         this.mapper = mapper;
         this.repository = repository;
     }
@@ -24,8 +24,8 @@ public class ProductPersistenceService implements ProductPersistencePort {
     @Override
     public List<Product> getAll() {
         return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .map(mapper::fromDbModel)
-                .toList();
+            .map(mapper::fromDbModel)
+            .toList();
     }
 
     @Override
