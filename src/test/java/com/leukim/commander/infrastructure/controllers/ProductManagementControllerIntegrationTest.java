@@ -1,21 +1,21 @@
 package com.leukim.commander.infrastructure.controllers;
 
-import static com.leukim.commander.assertions.Assertions.assertThat;
-
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
+import com.leukim.commander.clients.ProductClient;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
-import java.util.UUID;
+import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.leukim.commander.assertions.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ProductManagementControllerIntegrationTest {
@@ -28,7 +28,7 @@ class ProductManagementControllerIntegrationTest {
     private ProductPersistencePort productPersistencePort;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private ProductClient productClient;
 
     @BeforeEach
     void setUp() {
@@ -40,11 +40,11 @@ class ProductManagementControllerIntegrationTest {
 
     @Test
     void getAllProducts_returnsProductList_fromPersistenceLayer() {
-        ProductDto[] products =
-            restTemplate.getForEntity("/api/products", ProductDto[].class)
-                .getBody();
+        List<ProductDto> products = productClient.getAll();
+
         assertThat(products).hasSize(1);
-        assertThat(products[0])
+
+        assertThat(products.getFirst())
             .hasName(PRODUCT_1.name())
             .hasDescription(PRODUCT_1.description());
     }
@@ -53,22 +53,18 @@ class ProductManagementControllerIntegrationTest {
     void createProduct_returnsCreatedProduct() {
         CreateProductDto createProductDto =
             new CreateProductDto("NewProduct", "NewDescription");
-        ResponseEntity<ProductDto> response =
-            restTemplate.postForEntity("/api/products", createProductDto,
-                ProductDto.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody())
+        ProductDto response = productClient.create(createProductDto);
+
+        assertThat(response)
             .hasName("NewProduct")
             .hasDescription("NewDescription");
     }
 
     @Test
     void getProductById_returnsProduct() {
-        ResponseEntity<ProductDto> response =
-            restTemplate.getForEntity("/api/products/" + productId,
-                ProductDto.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody())
+        ProductDto response = productClient.getById(productId);
+
+        assertThat(response)
             .hasId(productId)
             .hasName(PRODUCT_1.name())
             .hasDescription(PRODUCT_1.description());
@@ -77,30 +73,37 @@ class ProductManagementControllerIntegrationTest {
     @Test
     void getProductById_notFound_returns404() {
         UUID randomId = UUID.randomUUID();
-        ResponseEntity<String> response =
-            restTemplate.getForEntity("/api/products/" + randomId,
-                String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).contains(randomId.toString());
+        try {
+            productClient.getById(randomId);
+            throw new AssertionError("Expecting NotFoundException");
+        } catch (FeignException.NotFound e) {
+            assertThat(e.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+            assertThat(e.getMessage()).contains(randomId.toString());
+        }
     }
 
     @Test
     void deleteProduct_removesProduct() {
-        restTemplate.delete("/api/products/" + productId);
+        productClient.delete(productId);
 
-        ResponseEntity<String> response =
-            restTemplate.getForEntity("/api/products/" + productId,
-                String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        try {
+            productClient.getById(productId);
+            throw new AssertionError("Expecting NotFoundException");
+        } catch (FeignException.NotFound e) {
+            assertThat(e.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+            assertThat(e.getMessage()).contains(productId.toString());
+        }
     }
 
     @Test
     void deleteProduct_notFound_returns404() {
         UUID randomId = UUID.randomUUID();
-        ResponseEntity<String> response =
-            restTemplate.exchange("/api/products/" + randomId,
-                HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).contains(randomId.toString());
+        try {
+            productClient.delete(randomId);
+            throw new AssertionError("Expecting NotFoundException");
+        } catch (FeignException.NotFound e) {
+            assertThat(e.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+            assertThat(e.getMessage()).contains(randomId.toString());
+        }
     }
 }
