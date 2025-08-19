@@ -3,6 +3,7 @@ package com.leukim.commander.infrastructure.controllers.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -34,7 +35,14 @@ public record OrderDto(
         description = "Indicates whether the order has been picked up",
         example = "false"
     )
-    boolean picked
+    boolean picked,
+
+    @JsonProperty("date")
+    @Schema(
+        description = "Date of the order",
+        example = "2025-08-19"
+    )
+    LocalDate date
 ) {
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public OrderDto {

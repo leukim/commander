@@ -3,6 +3,7 @@ package com.leukim.commander.assertions;
 import static com.leukim.commander.assertions.Assertions.assertThat;
 
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 import org.assertj.core.api.AbstractAssert;
@@ -49,5 +50,10 @@ public final class OrderDtoAssert extends AbstractAssert<OrderDtoAssert, OrderDt
         isNotNull();
         assertThat(actual.picked()).isFalse();
         return this;
+    }
+
+    public void hasDate(LocalDate date) {
+        isNotNull();
+        assertThat(actual.date()).isEqualTo(date);
     }
 }

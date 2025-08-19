@@ -69,6 +69,13 @@ public final class OrderPersistenceService implements OrderPersistencePort {
     }
 
     @Override
+    public List<Order> getByDate(java.time.LocalDate date) {
+        return repository.findByDate(date).stream()
+            .map(dbOrder -> orderMapper.fromDbModel(dbOrder, getAllProducts()))
+            .toList();
+    }
+
+    @Override
     public Order addItem(UUID orderId, Product product, double quantity) {
         DbOrder dbOrder = repository.findById(orderId).orElseThrow();
 
@@ -93,7 +100,8 @@ public final class OrderPersistenceService implements OrderPersistencePort {
                     Entry::getKey,
                     Entry::getValue
                 )),
-            order.picked()
+            order.picked(),
+            order.date()
         );
     }
 
