@@ -9,6 +9,8 @@ import com.leukim.commander.application.ports.in.model.CreateOrderDto;
 import com.leukim.commander.application.ports.out.OrderPersistencePort;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +26,9 @@ import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrderManagementControllerIntegrationTest {
+    private static final LocalDate TEST_DATE = LocalDate.of(2025, 8, 19);
     private static final Order ORDER_1 =
-        new Order(null, "TestOrder", Map.of(), false);
+        new Order(null, "TestOrder", Map.of(), false, TEST_DATE);
     private static final Product PRODUCT_1 =
         new Product(null, "TestProduct", "TestDescription");
 
@@ -45,7 +48,7 @@ class OrderManagementControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         persistencePort.deleteAll();
-        CreateOrderDto createOrderDto = new CreateOrderDto(ORDER_1.name());
+        CreateOrderDto createOrderDto = new CreateOrderDto(ORDER_1.name(), TEST_DATE);
         Order save = persistencePort.create(createOrderDto);
         orderId = save.id();
 
@@ -55,7 +58,7 @@ class OrderManagementControllerIntegrationTest {
 
     @Test
     void createOrder_returnsCreatedOrder() {
-        CreateOrderDto createOrderDto = new CreateOrderDto("OrderName");
+        CreateOrderDto createOrderDto = new CreateOrderDto("OrderName", TEST_DATE);
         ResponseEntity<OrderDto> response =
             restTemplate.postForEntity("/api/orders", createOrderDto,
                 OrderDto.class);
@@ -65,7 +68,8 @@ class OrderManagementControllerIntegrationTest {
             .isNotNull()
             .hasName("OrderName")
             .hasNoItems()
-            .isNotPicked();
+            .isNotPicked()
+            .hasDate(TEST_DATE);
     }
 
     @Test
@@ -151,5 +155,42 @@ class OrderManagementControllerIntegrationTest {
         assertThat(response.getBody())
             .isNotNull()
             .hasNoItems();
+    }
+
+    @Test
+    void getOrderByDate_returnsOrdersForDate() {
+        ResponseEntity<OrderDto[]> response =
+            restTemplate.getForEntity("/api/orders/date/" + TEST_DATE.format(DateTimeFormatter.ISO_DATE),
+                OrderDto[].class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        OrderDto[] orders = response.getBody();
+
+        assertThat(orders)
+            .isNotNull()
+            .hasSize(1)
+            .allSatisfy(order -> {
+                assertThat(order).hasId(orderId)
+                    .hasName(ORDER_1.name())
+                    .hasNoItems()
+                    .isNotPicked()
+                    .hasDate(TEST_DATE);
+            });
+    }
+
+    @Test
+    void getOrderForADifferentDay_returnsNoOrders() {
+        LocalDate testPlus1 = TEST_DATE.plusDays(1);
+
+        ResponseEntity<OrderDto[]> response =
+            restTemplate.getForEntity("/api/orders/date/" + testPlus1.format(DateTimeFormatter.ISO_DATE),
+                OrderDto[].class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        OrderDto[] orders = response.getBody();
+
+        assertThat(orders)
+            .isNotNull()
+            .isEmpty();
     }
 }

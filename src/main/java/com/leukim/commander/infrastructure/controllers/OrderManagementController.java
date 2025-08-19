@@ -8,8 +8,10 @@ import com.leukim.commander.infrastructure.controllers.exception.OrderNotFoundEx
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
 import com.leukim.commander.infrastructure.mappers.OrderMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,5 +75,11 @@ public final class OrderManagementController {
             throw new OrderNotFoundException(id);
         }
         useCase.remove(id);
+    }
+
+    @Operation(summary = "Get orders by date", description = "Retrieves a list of orders for a specific date.")
+    @GetMapping("/date/{date}")
+    public List<OrderDto> getByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return mapper.toDtoList(useCase.getByDate(date));
     }
 }

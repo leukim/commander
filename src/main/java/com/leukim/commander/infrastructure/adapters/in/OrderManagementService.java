@@ -64,4 +64,9 @@ public final class OrderManagementService implements OrderManagementUseCase {
     public void remove(UUID id) {
         persistencePort.delete(id);
     }
+
+    @Override
+    public List<Order> getByDate(java.time.LocalDate date) {
+        return persistencePort.getByDate(date);
+    }
 }

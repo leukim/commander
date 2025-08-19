@@ -1,11 +1,13 @@
 package com.leukim.commander.infrastructure.adapters.out.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,6 +21,8 @@ public final class DbOrder {
     @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
     private List<DbProductQuantity> items;
     private boolean picked;
+    @Column(nullable = false)
+    private LocalDate date;
 
     public DbOrder() {
     }
@@ -57,6 +61,14 @@ public final class DbOrder {
 
     public void setPicked(boolean picked) {
         this.picked = picked;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override

@@ -45,7 +45,8 @@ public interface OrderMapper {
             dbOrder.getId(),
             dbOrder.getName(),
             mapItemsFromDb(dbOrder, allProducts),
-            dbOrder.isPicked()
+            dbOrder.isPicked(),
+            dbOrder.getDate()
         );
     }
 
