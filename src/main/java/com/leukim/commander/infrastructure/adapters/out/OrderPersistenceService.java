@@ -77,6 +77,10 @@ public final class OrderPersistenceService implements OrderPersistencePort {
 
     @Override
     public Order addItem(UUID orderId, Product product, double quantity) {
+//        DbOrder dbOrder = repository.findById(orderId).map(foundDbOrder -> {
+//            foundDbOrder.addItem(new DbProductQuantity());
+//            return foundDbOrder;
+//        }).orElseThrow();
         DbOrder dbOrder = repository.findById(orderId).orElseThrow();
 
         DbProduct dbProduct = productMapper.toDbModel(product);
@@ -103,6 +107,16 @@ public final class OrderPersistenceService implements OrderPersistencePort {
             order.picked(),
             order.date()
         );
+    }
+
+    @Override
+    public Order pickUp(UUID id) {
+        DbOrder result = repository.findById(id).map(dbOrder -> {
+            dbOrder.setPicked(true);
+            return repository.save(dbOrder);
+        }).orElseThrow();
+
+        return orderMapper.fromDbModel(result, getAllProducts());
     }
 
     @Override

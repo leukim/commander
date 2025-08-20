@@ -68,6 +68,12 @@ public final class OrderManagementController {
         return mapper.toDto(order);
     }
 
+    @Operation(summary = "Pick up an order", description = "Marks an order as picked up by its unique identifier.")
+    @PostMapping("/{id}/pickup")
+    public OrderDto pickUp(@PathVariable UUID id) {
+        return mapper.toDto(useCase.pickUp(id));
+    }
+
     @Operation(summary = "Delete an order", description = "Deletes an order by its unique identifier.")
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable UUID id) {

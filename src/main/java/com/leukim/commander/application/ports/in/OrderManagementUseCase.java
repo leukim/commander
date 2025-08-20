@@ -19,6 +19,8 @@ public interface OrderManagementUseCase {
 
     Order removeItem(UUID orderId, UUID productId);
 
+    Order pickUp(UUID id);
+
     void remove(UUID id);
 
     List<Order> getByDate(LocalDate date);

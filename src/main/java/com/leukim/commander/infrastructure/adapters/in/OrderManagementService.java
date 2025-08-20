@@ -61,6 +61,11 @@ public final class OrderManagementService implements OrderManagementUseCase {
     }
 
     @Override
+    public Order pickUp(UUID id) {
+        return persistencePort.pickUp(id);
+    }
+
+    @Override
     public void remove(UUID id) {
         persistencePort.delete(id);
     }
