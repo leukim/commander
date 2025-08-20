@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(url = "${service.url:http://localhost:${local.server.port}}", name = "orderClient")
+@FeignClient(
+    url = "${service.url:http://localhost:${local.server.port}}",
+    name = "orderClient",
+    configuration = FeignClientConfiguration.class
+)
 public interface OrderClient {
     @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + ORDER_BASE_PATH)
     List<OrderDto> getAll();

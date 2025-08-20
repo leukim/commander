@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(url = "${service.url:http://localhost:${local.server.port}}", name = "productClient")
+@FeignClient(
+    url = "${service.url:http://localhost:${local.server.port}}",
+    name = "productClient",
+    configuration =  FeignClientConfiguration.class
+)
 public interface ProductClient {
     @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + PRODUCT_BASE_PATH)
     List<ProductDto> getAll();
