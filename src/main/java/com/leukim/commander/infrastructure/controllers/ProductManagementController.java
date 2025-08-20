@@ -1,5 +1,7 @@
 package com.leukim.commander.infrastructure.controllers;
 
+import static com.leukim.commander.infrastructure.controllers.ApiConfig.API_BASE_PATH;
+
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
@@ -18,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("/api/products")
+@RequestMapping(API_BASE_PATH + ProductManagementController.PRODUCT_BASE_PATH)
 public final class ProductManagementController {
+    public static final String PRODUCT_BASE_PATH = "/products";
+
     private final ProductManagementUseCase useCase;
     private final ProductMapper mapper;
 

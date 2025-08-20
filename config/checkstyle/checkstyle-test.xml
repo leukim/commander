@@ -183,6 +183,7 @@
         <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor">
             <property name="ignoreAnnotatedBy" value="SpringBootApplication"/>
+            <property name="ignoreAnnotatedBy" value="Configuration"/>
         </module>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>

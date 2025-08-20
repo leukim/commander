@@ -17,3 +17,7 @@ spring:
   cloud:
     openfeign:
       lazy-attributes-resolution: true
+      client:
+        config:
+          default:
+            loggerLevel: FULL
