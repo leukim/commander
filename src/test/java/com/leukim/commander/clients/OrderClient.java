@@ -32,6 +32,9 @@ public interface OrderClient {
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/orders/{orderId}/items/{productId}")
     OrderDto removeItem(@PathVariable UUID orderId, @PathVariable UUID productId);
 
+    @RequestMapping(method = RequestMethod.POST, value = "/api/orders/{id}/pickup")
+    OrderDto pickUp(@PathVariable UUID id);
+
     @RequestMapping(method = RequestMethod.GET, value = "/api/orders/date/{date}")
     List<OrderDto> getByDate(@PathVariable String date); // Feign only supports String for path variables
 }

@@ -1,5 +1,7 @@
 package com.leukim.commander.infrastructure.controllers;
 
+import static com.leukim.commander.assertions.Assertions.assertThat;
+
 import com.leukim.commander.application.model.Order;
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
@@ -8,18 +10,15 @@ import com.leukim.commander.application.ports.out.OrderPersistencePort;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.clients.OrderClient;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static com.leukim.commander.assertions.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,10 +60,10 @@ class OrderManagementControllerIntegrationTest {
         assertThat(orders).hasSize(1);
 
         assertThat(orders.getFirst())
-                .hasId(orderId)
-                .hasName(ORDER_1.name())
-                .hasNoItems()
-                .isNotPicked();
+            .hasId(orderId)
+            .hasName(ORDER_1.name())
+            .hasNoItems()
+            .isNotPicked();
     }
 
     @Test
@@ -156,13 +155,12 @@ class OrderManagementControllerIntegrationTest {
         assertThat(orders)
             .isNotNull()
             .hasSize(1)
-            .allSatisfy(order -> {
+            .allSatisfy(order ->
                 assertThat(order).hasId(orderId)
                     .hasName(ORDER_1.name())
                     .hasNoItems()
                     .isNotPicked()
-                    .hasDate(TEST_DATE);
-            });
+                    .hasDate(TEST_DATE));
     }
 
     @Test
@@ -173,5 +171,17 @@ class OrderManagementControllerIntegrationTest {
         assertThat(orders)
             .isNotNull()
             .isEmpty();
+    }
+
+    @Test
+    void pickUpOrder_marksOrderAsPicked() {
+        OrderDto response = orderClient.pickUp(orderId);
+        assertThat(response)
+            .isNotNull()
+            .hasId(orderId)
+            .hasName(ORDER_1.name())
+            .hasNoItems()
+            .isPicked()
+            .hasDate(TEST_DATE);
     }
 }

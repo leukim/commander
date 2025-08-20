@@ -21,6 +21,8 @@ public interface OrderPersistencePort {
 
     Order removeItem(Order order, UUID productId);
 
+    Order pickUp(UUID id);
+
     void delete(UUID id);
 
     void deleteAll();
