@@ -1,5 +1,7 @@
 package com.leukim.commander.infrastructure.controllers;
 
+import static com.leukim.commander.infrastructure.controllers.ApiConfig.API_BASE_PATH;
+
 import com.leukim.commander.application.model.Order;
 import com.leukim.commander.application.ports.in.OrderManagementUseCase;
 import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
@@ -21,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping(API_BASE_PATH + OrderManagementController.ORDER_BASE_PATH)
 public final class OrderManagementController {
+    public static final String ORDER_BASE_PATH = "/orders";
+
     private final OrderManagementUseCase useCase;
     private final OrderMapper mapper;
 

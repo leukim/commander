@@ -1,5 +1,8 @@
 package com.leukim.commander.clients;
 
+import static com.leukim.commander.infrastructure.controllers.ApiConfig.API_BASE_PATH;
+import static com.leukim.commander.infrastructure.controllers.OrderManagementController.ORDER_BASE_PATH;
+
 import com.leukim.commander.application.ports.in.model.AddOrderItemDto;
 import com.leukim.commander.application.ports.in.model.CreateOrderDto;
 import com.leukim.commander.infrastructure.controllers.model.OrderDto;
@@ -14,27 +17,30 @@ import java.util.UUID;
 
 @FeignClient(url = "${service.url:http://localhost:${local.server.port}}", name = "orderClient")
 public interface OrderClient {
-    @RequestMapping(method = RequestMethod.GET, value = "/api/orders")
+    @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + ORDER_BASE_PATH)
     List<OrderDto> getAll();
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/orders")
+    @RequestMapping(method = RequestMethod.POST, value = API_BASE_PATH + ORDER_BASE_PATH)
     OrderDto create(@RequestBody CreateOrderDto orderDto);
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/orders/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + ORDER_BASE_PATH + "/{id}")
     OrderDto getById(@PathVariable UUID id);
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/api/orders/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = API_BASE_PATH + ORDER_BASE_PATH + "/{id}")
     void delete(@PathVariable UUID id);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/orders/{orderId}/items")
+    @RequestMapping(method = RequestMethod.POST, value = API_BASE_PATH + ORDER_BASE_PATH + "/{orderId}/items")
     OrderDto addItem(@PathVariable UUID orderId, @RequestBody AddOrderItemDto dto);
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/api/orders/{orderId}/items/{productId}")
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = API_BASE_PATH + ORDER_BASE_PATH + "/{orderId}/items/{productId}"
+    )
     OrderDto removeItem(@PathVariable UUID orderId, @PathVariable UUID productId);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/orders/{id}/pickup")
+    @RequestMapping(method = RequestMethod.POST, value = API_BASE_PATH + ORDER_BASE_PATH + "/{id}/pickup")
     OrderDto pickUp(@PathVariable UUID id);
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/orders/date/{date}")
+    @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + ORDER_BASE_PATH + "/date/{date}")
     List<OrderDto> getByDate(@PathVariable String date); // Feign only supports String for path variables
 }
