@@ -6,6 +6,10 @@ import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.clients.ProductClient;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import feign.FeignException;
+import java.io.IOException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +109,17 @@ class ProductManagementControllerIntegrationTest {
             assertThat(e.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
             assertThat(e.getMessage()).contains(randomId.toString());
         }
+    }
+
+    @Test
+    void exportProducts_generatesCSVFile() throws IOException {
+        String export = productClient.export();
+
+        CSVParser parser = CSVParser.parse(export, CSVFormat.Builder.create().setHeader("name", "description").get());
+
+        List<CSVRecord> records = parser.getRecords();
+        assertThat(records).hasSize(2);
+        assertThat(records.get(1).get("name")).isEqualTo(PRODUCT_1.name());
+        assertThat(records.get(1).get("description")).isEqualTo(PRODUCT_1.description());
     }
 }

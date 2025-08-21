@@ -30,5 +30,8 @@ public interface ProductClient {
 
     @RequestMapping(method = RequestMethod.DELETE, value = API_BASE_PATH + PRODUCT_BASE_PATH + "/{id}")
     void delete(@PathVariable UUID id);
+
+    @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + PRODUCT_BASE_PATH + "/export")
+    String export();
 }
 

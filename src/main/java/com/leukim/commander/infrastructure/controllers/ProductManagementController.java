@@ -1,6 +1,7 @@
 package com.leukim.commander.infrastructure.controllers;
 
 import static com.leukim.commander.infrastructure.controllers.ApiConfig.API_BASE_PATH;
+import static com.leukim.commander.infrastructure.export.CSVExport.createProductsCSVFile;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
@@ -11,6 +12,11 @@ import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +50,19 @@ public final class ProductManagementController {
     public ProductDto add(@RequestBody CreateProductDto createProductDto) {
         Product createdProduct = useCase.create(createProductDto);
         return mapper.toDto(createdProduct);
+    }
+
+    @Operation(summary = "Export all products", description = "Generate a CSV file containing all products")
+    @GetMapping("/export")
+    public ResponseEntity<Resource> exportAllProducts() {
+        InputStreamResource fileInputStream = createProductsCSVFile(useCase.getAll());
+        String csvFileName = "products.csv";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + csvFileName);
+        headers.set(HttpHeaders.CONTENT_TYPE, "text/csv");
+
+        return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
     }
 
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its unique identifier.")

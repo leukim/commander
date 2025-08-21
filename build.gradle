@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "org.apache.commons:commons-csv:${commonsCSVVersion}"
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
     implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
