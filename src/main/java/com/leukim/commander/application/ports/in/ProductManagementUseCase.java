@@ -13,5 +13,7 @@ public interface ProductManagementUseCase {
 
     Product create(CreateProductDto createProductDto);
 
+    List<Product> bulkCreate(List<CreateProductDto> createProductDtos);
+
     void remove(UUID id);
 }

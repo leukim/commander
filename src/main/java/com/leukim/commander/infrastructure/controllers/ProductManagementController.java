@@ -1,7 +1,8 @@
 package com.leukim.commander.infrastructure.controllers;
 
 import static com.leukim.commander.infrastructure.controllers.ApiConfig.API_BASE_PATH;
-import static com.leukim.commander.infrastructure.export.CSVExport.createProductsCSVFile;
+import static com.leukim.commander.infrastructure.export.CSVUtils.createProductsCSVFile;
+import static com.leukim.commander.infrastructure.export.CSVUtils.parseCsvToCreateProductDto;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.ProductManagementUseCase;
@@ -16,6 +17,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +65,16 @@ public final class ProductManagementController {
         headers.set(HttpHeaders.CONTENT_TYPE, "text/csv");
 
         return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Import products", description = "Import from CSV file containing products")
+    @PostMapping(value = "/import", consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public List<ProductDto> importProducts(@RequestBody Resource resource) {
+        List<CreateProductDto> productsToCreate = parseCsvToCreateProductDto(resource);
+
+        List<Product> products = useCase.bulkCreate(productsToCreate);
+
+        return mapper.toDtoList(products);
     }
 
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its unique identifier.")

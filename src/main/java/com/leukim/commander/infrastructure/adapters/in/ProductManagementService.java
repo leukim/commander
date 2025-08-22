@@ -39,6 +39,11 @@ public final class ProductManagementService
     }
 
     @Override
+    public List<Product> bulkCreate(List<CreateProductDto> createProductDtos) {
+        return createProductDtos.stream().map(this::create).toList();
+    }
+
+    @Override
     public void remove(UUID id) {
         persistencePort.delete(id);
     }

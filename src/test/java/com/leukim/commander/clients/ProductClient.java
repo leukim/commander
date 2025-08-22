@@ -5,13 +5,14 @@ import static com.leukim.commander.infrastructure.controllers.ProductManagementC
 
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import java.util.List;
-import java.util.UUID;
 
 @FeignClient(
     url = "${service.url:http://localhost:${local.server.port}}",
@@ -33,5 +34,8 @@ public interface ProductClient {
 
     @RequestMapping(method = RequestMethod.GET, value = API_BASE_PATH + PRODUCT_BASE_PATH + "/export")
     String export();
+
+    @RequestMapping(method = RequestMethod.POST, value = API_BASE_PATH + PRODUCT_BASE_PATH + "/import")
+    List<ProductDto> importProducts(@RequestBody Resource resource);
 }
 
