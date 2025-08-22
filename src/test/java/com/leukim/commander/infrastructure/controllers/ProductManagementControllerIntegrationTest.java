@@ -1,13 +1,13 @@
 package com.leukim.commander.infrastructure.controllers;
 
 import static com.leukim.commander.assertions.Assertions.assertThat;
+import static com.leukim.commander.assertions.Assertions.assertThatProductList;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
 import com.leukim.commander.clients.ProductClient;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
-import com.leukim.commander.infrastructure.mappers.ProductMapper;
 import feign.FeignException;
 import java.io.IOException;
 import java.util.List;
@@ -37,8 +37,6 @@ class ProductManagementControllerIntegrationTest {
 
     @Autowired
     private ProductClient productClient;
-    @Autowired
-    private ProductMapper productMapper;
 
     @BeforeEach
     void setUp() {
@@ -146,25 +144,19 @@ class ProductManagementControllerIntegrationTest {
         List<ProductDto> response = productClient.importProducts(resource);
 
         assertThat(response).hasSize(2);
-
         response.stream().map(ProductDto::id).forEach(id -> assertThat(id).isNotNull());
-
-        assertThat(response.stream().map(ProductDto::name).toList())
-            .containsExactlyInAnyOrder("PR1", "PR2");
-
-        assertThat(response.stream().map(ProductDto::description).toList())
-            .containsExactlyInAnyOrder("DE1", "DE2");
+        assertThatProductList(response).containsProductData(data);
 
         List<ProductDto> productsInDB = productClient.getAll();
 
         assertThat(productsInDB).hasSize(3);
-
         productsInDB.stream().map(ProductDto::id).forEach(id -> assertThat(id).isNotNull());
-
-        assertThat(productsInDB.stream().map(ProductDto::name).toList())
-            .containsExactlyInAnyOrder(PRODUCT_1.name(), "PR1", "PR2");
-
-        assertThat(productsInDB.stream().map(ProductDto::description).toList())
-            .containsExactlyInAnyOrder(PRODUCT_1.description(), "DE1", "DE2");
+        assertThatProductList(productsInDB).containsProductData(
+            List.of(
+                List.of(PRODUCT_1.name(), PRODUCT_1.description()),
+                List.of("PR1", "DE1"),
+                List.of("PR2", "DE2")
+            )
+        );
     }
 }
