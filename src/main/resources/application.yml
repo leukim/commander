@@ -13,6 +13,9 @@ spring:
     locations: classpath:db/migration
     enabled: true
 
+server:
+  port: ${PORT:8080}
+
 springdoc:
   api-docs:
     path: /api-docs
