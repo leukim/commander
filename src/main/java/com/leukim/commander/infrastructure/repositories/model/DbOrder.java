@@ -1,26 +1,30 @@
-package com.leukim.commander.infrastructure.adapters.out.model;
+package com.leukim.commander.infrastructure.repositories.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public final class DbProduct {
+public final class DbOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String description;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<DbProductQuantity> quantities;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
+    private List<DbProductQuantity> items;
+    private boolean picked;
+    @Column(nullable = false)
+    private LocalDate date;
 
-    public DbProduct() {
+    public DbOrder() {
     }
 
     public UUID getId() {
@@ -39,20 +43,32 @@ public final class DbProduct {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public List<DbProductQuantity> getItems() {
+        return items;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void addItem(DbProductQuantity item) {
+        this.items.add(item);
     }
 
-    public List<DbProductQuantity> getQuantities() {
-        return quantities;
+    public void setItems(List<DbProductQuantity> items) {
+        this.items = items;
     }
 
-    public void setQuantities(List<DbProductQuantity> quantities) {
-        this.quantities = quantities;
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override
@@ -63,23 +79,24 @@ public final class DbProduct {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        var that = (DbProduct) obj;
+        var that = (DbOrder) obj;
         return Objects.equals(this.id, that.id)
             && Objects.equals(this.name, that.name)
-            && Objects.equals(this.description, that.description);
+            && Objects.equals(this.items, that.items)
+            && this.picked == that.picked;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description);
+        return Objects.hash(id, name, items, picked);
     }
 
     @Override
     public String toString() {
-        return "DbItemType["
+        return "DbOrder["
             + "id=" + id + ", "
             + "name=" + name + ", "
-            + "description=" + description + "]";
+            + "items=" + items + ", "
+            + "picked=" + picked + ']';
     }
-
 }

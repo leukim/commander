@@ -2,8 +2,9 @@ package com.leukim.commander.infrastructure.adapters.out;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.out.ProductPersistencePort;
-import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
+import com.leukim.commander.infrastructure.repositories.model.DbProduct;
 import com.leukim.commander.infrastructure.mappers.ProductMapper;
+import com.leukim.commander.infrastructure.repositories.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

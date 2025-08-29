@@ -1,4 +1,4 @@
-package com.leukim.commander.infrastructure.adapters.out.model;
+package com.leukim.commander.infrastructure.repositories.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

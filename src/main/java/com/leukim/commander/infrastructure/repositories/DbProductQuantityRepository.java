@@ -1,6 +1,6 @@
-package com.leukim.commander.infrastructure.adapters.out;
+package com.leukim.commander.infrastructure.repositories;
 
-import com.leukim.commander.infrastructure.adapters.out.model.DbProductQuantity;
+import com.leukim.commander.infrastructure.repositories.model.DbProductQuantity;
 import jakarta.transaction.Transactional;
 import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;
