@@ -20,7 +20,9 @@ export const CommanderNavbar = () => {
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
-            <Navbar.Brand href="/">Commander</Navbar.Brand>
+            <Navbar.Brand href="/">
+                <img src="../../public/icon.svg" width="30" height="30" className="d-inline-block align-top"/>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
