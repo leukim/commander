@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class AuthorityId implements Serializable {
-    private final String username;
-    private final String authority;
+    private String username;
+    private String authority;
+
+    public AuthorityId() {
+    }
 
     public AuthorityId(String username, String authority) {
         this.username = username;

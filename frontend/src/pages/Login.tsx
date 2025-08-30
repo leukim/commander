@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useAuth} from "../hooks/useAuth.tsx";
+import React, {useState} from "react";
+import {useAuth} from "../hooks/useAuth";
 import {Button, Container, Form} from "react-bootstrap";
 import {useSearchParams} from "react-router-dom";
 

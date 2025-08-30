@@ -1,6 +1,6 @@
+import React, {ReactElement} from "react";
 import {Navigate, useLocation} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth.js";
-import {ReactElement} from "react";
 
 export const ProtectedRoute = ({children}: { children: ReactElement }) => {
     const location = useLocation();

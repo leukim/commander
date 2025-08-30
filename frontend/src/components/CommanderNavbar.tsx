@@ -1,3 +1,4 @@
+import React from "react";
 import {Button, Col, Form, Nav, Navbar, Row} from "react-bootstrap";
 import {useAuth} from "../hooks/useAuth.js";
 
@@ -10,7 +11,7 @@ export const CommanderNavbar = () => {
             <Row>
                 <Col xs="6" />
                 <Col xs="2">
-                    <Form.Control readOnly plaintext value={user.username} />
+                    <Form.Control readOnly plaintext value={user} />
                 </Col>
                 <Col xs="2">
                     <Button variant="outline-primary" onClick={() => logout()}>Logout</Button>
