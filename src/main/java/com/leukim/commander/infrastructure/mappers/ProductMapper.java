@@ -2,7 +2,7 @@ package com.leukim.commander.infrastructure.mappers;
 
 import com.leukim.commander.application.model.Product;
 import com.leukim.commander.application.ports.in.model.CreateProductDto;
-import com.leukim.commander.infrastructure.adapters.out.model.DbProduct;
+import com.leukim.commander.infrastructure.repositories.model.DbProduct;
 import com.leukim.commander.infrastructure.controllers.model.ProductDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

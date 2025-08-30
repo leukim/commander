@@ -1,6 +1,6 @@
-package com.leukim.commander.infrastructure.adapters.out;
+package com.leukim.commander.infrastructure.repositories;
 
-import com.leukim.commander.infrastructure.adapters.out.model.DbOrder;
+import com.leukim.commander.infrastructure.repositories.model.DbOrder;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
