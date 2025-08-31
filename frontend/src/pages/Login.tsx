@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useAuth} from "../hooks/useAuth";
 import {Button, Container, Form} from "react-bootstrap";
 import {useSearchParams} from "react-router-dom";
+import Api from "../utils/Api";
 
 export const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -11,10 +12,11 @@ export const LoginPage = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        if (username === "test" && password === "") {
-            await login({username}, searchParams.get("ref"));
-        } else {
-            alert("Invalid username");
+        try {
+            const token = await Api.login(username, password);
+            login({username, token}, searchParams.get("ref"));
+        } catch (error) {
+            alert("Incorrect credentials");
         }
     };
 

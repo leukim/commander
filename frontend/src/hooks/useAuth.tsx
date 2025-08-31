@@ -1,16 +1,16 @@
-import {createContext, useContext, useMemo} from "react";
+import React, {createContext, useContext, useMemo} from "react";
 import {useNavigate} from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
-import {AuthType} from "../types/AuthType";
+import {Auth, User} from "../types/Auth";
 
-const AuthContext = createContext<AuthType>(null);
+const AuthContext = createContext<Auth>(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useLocalStorage("user", null);
     const navigate = useNavigate();
 
     // call this function when you want to authenticate the user
-    const login = (data: string, ref = "/") => {
+    const login = (data: User, ref = "/") => {
         setUser(data);
         navigate(ref);
     };
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         navigate("/login", { replace: true });
     };
 
-    const value : AuthType = useMemo(
+    const value : Auth = useMemo(
         () => ({
             user,
             login,
@@ -32,6 +32,6 @@ export const AuthProvider = ({ children }) => {
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () : AuthType => {
+export const useAuth = () : Auth => {
     return useContext(AuthContext);
 };

@@ -9,9 +9,9 @@ export const CommanderNavbar = () => {
         <></> :
         <Form>
             <Row>
-                <Col xs="6" />
-                <Col xs="2">
-                    <Form.Control readOnly plaintext value={user} />
+                <Col xs="5" />
+                <Col xs="3">
+                    <Form.Control readOnly plaintext value={user.username} />
                 </Col>
                 <Col xs="2">
                     <Button variant="outline-primary" onClick={() => logout()}>Logout</Button>
