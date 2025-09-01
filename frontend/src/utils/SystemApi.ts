@@ -1,6 +1,5 @@
 import {StatusType} from "../types/StatusType";
-
-const BACKEND_URL = 'http://localhost:8080';
+import {BACKEND_URL} from "./ApiUtils";
 
 const getStatus = async () =>
     new Promise<StatusType>((resolve, reject) => {

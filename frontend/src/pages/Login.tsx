@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useAuth} from "../hooks/useAuth";
 import {Button, Container, Form} from "react-bootstrap";
 import {useSearchParams} from "react-router-dom";
-import Api from "../utils/Api";
+import Api from "../utils/SystemApi";
 
 export const LoginPage = () => {
     const [username, setUsername] = useState("");

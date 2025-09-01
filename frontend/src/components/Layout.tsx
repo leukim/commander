@@ -6,7 +6,7 @@ import {CommanderNavbar} from "./CommanderNavbar";
 export const Layout = () => (
     <>
         <CommanderNavbar/>
-        <Container fluid>
+        <Container>
             <Outlet/>
         </Container>
     </>
