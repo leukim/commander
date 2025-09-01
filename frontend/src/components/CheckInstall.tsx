@@ -1,6 +1,6 @@
 import React from "react";
 import {Outlet, useNavigate} from "react-router-dom";
-import Api from "../utils/Api";
+import Api from "../utils/SystemApi";
 
 export const CheckInstall = () => {
     const navigate = useNavigate();
