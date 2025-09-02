@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Container, Row, Table} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AddProductModal from "../components/modals/AddProductModal";
 import ProductCard from "../components/products/ProductCard";
@@ -13,6 +13,7 @@ export const ProductsPage = () => {
         ProductApi.getProducts()
             .then((data) => {
                 setProducts(data);
+                //setLoading(false);
             });
     }
 
@@ -31,29 +32,21 @@ export const ProductsPage = () => {
                 </Col>
             </Row>
             <Row>
-                <Col xs={12}>
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Description</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody className="table-group-divider">
+                <Col>
+                    <Row xs={2} sm={2} md={3} lg={4} className="g-4">
                         {products.map((product) => (
-                            <ProductCard product={product} onProductDeleted={updateProducts} key={product.id} />
+                            <Col><ProductCard product={product} onProductDeleted={updateProducts}
+                                              key={product.id}/></Col>
                         ))}
-                        </tbody>
-                    </Table>
-                    <AddProductModal
-                        show={showAdd}
-                        onClickOut={() => setShowAdd(false)}
-                        onProductCreated={() => {
-                            setShowAdd(false);
-                            updateProducts();
-                        }}
-                    />
+                        <AddProductModal
+                            show={showAdd}
+                            onClickOut={() => setShowAdd(false)}
+                            onProductCreated={() => {
+                                setShowAdd(false);
+                                updateProducts();
+                            }}
+                        />
+                    </Row>
                 </Col>
             </Row>
         </Container>

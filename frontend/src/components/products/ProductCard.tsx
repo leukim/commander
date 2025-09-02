@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Modal} from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Product} from "../../types/Product";
 import ProductsApi from "../../utils/ProductsApi";
@@ -33,27 +33,35 @@ const ProductCard: React.FC<ProductCardProps> = (props: ProductCardProps) => {
     };
 
     return (
-        <tr key={product.id}>
-            <td>{product.name}</td>
-            <td>{product.description}</td>
-            <td>
-                <Button variant="danger" size="sm"
-                        onClick={() => confirmDelete(product.name, product.id)}>
-                    <FontAwesomeIcon icon="trash"/>
-                </Button>
-                <Modal show={showDelete} onHide={() => setShowDelete(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Confirm deletion</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>
-                            Do you really want to delete {productToDelete.name}?
-                        </div>
-                        <Button variant="danger" color="danger" onClick={performDelete}>Delete</Button>
-                    </Modal.Body>
-                </Modal>
-            </td>
-        </tr>
+        <Card>
+            <Card.Body>
+                <Card.Title>
+                    <Container>
+                        <Row>
+                            <Col xs={9}>{product.name}</Col>
+                            <Col xs={1}>
+                                <Button variant="danger" size="sm"
+                                        onClick={() => confirmDelete(product.name, product.id)}>
+                                    <FontAwesomeIcon icon="trash"/>
+                                </Button>
+                                <Modal show={showDelete} onHide={() => setShowDelete(false)}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Confirm deletion</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <div>
+                                            Do you really want to delete {productToDelete.name}?
+                                        </div>
+                                        <Button variant="danger" color="danger" onClick={performDelete}>Delete</Button>
+                                    </Modal.Body>
+                                </Modal>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Card.Title>
+                <Card.Subtitle>{product.description}</Card.Subtitle>
+            </Card.Body>
+        </Card>
     );
 };
 
