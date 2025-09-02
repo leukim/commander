@@ -1,56 +1,23 @@
 import React, {useEffect, useState} from "react";
-import {addProduct, deleteProduct, getProducts} from "../utils/ProductsApi";
-import {useAuth} from "../hooks/useAuth";
-import {Button, Col, Container, Form, Modal, Row, Table} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import AddProductModal from "../components/modals/AddProductModal";
+import ProductCard from "../components/products/ProductCard";
+import ProductApi from "../utils/ProductsApi";
 
 export const ProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [showAdd, setShowAdd] = useState(false);
-    const [newProductName, setNewProductName] = useState("");
-    const [newProductDescription, setNewProductDescription] = useState("");
-    const [showDelete, setShowDelete] = useState(false);
-    const [productToDelete, setProductToDelete] = useState({name: null, id: null});
-
-    const {user} = useAuth();
 
     const updateProducts = () => {
-        getProducts(user.token)
+        ProductApi.getProducts()
             .then((data) => {
                 setProducts(data);
+                //setLoading(false);
             });
     }
 
     useEffect(updateProducts, []);
-
-    const handleSubmit = () => {
-        try {
-            addProduct(user.token, newProductName, newProductDescription)
-                .then(() => {
-                    setShowAdd(false);
-                    updateProducts();
-                });
-        } catch (error) {
-            alert("Could not add product");
-        }
-    };
-
-    const confirmDelete = (name: string, id: string) => {
-        setProductToDelete({name, id});
-        setShowDelete(true);
-    }
-
-    const performDelete = () => {
-        setShowDelete(false);
-        try {
-            deleteProduct(user.token, productToDelete.id)
-                .then((_) => {
-                    updateProducts();
-                })
-        } catch (error) {
-            alert("Could not delete product");
-        }
-    };
 
     return (
         <Container>
@@ -60,65 +27,26 @@ export const ProductsPage = () => {
                 </Col>
                 <Col xs={1}>
                     <Button variant="primary" onClick={() => setShowAdd(true)}>
-                        <FontAwesomeIcon icon="fa-solid fa-plus"/>
+                        <FontAwesomeIcon icon="plus"/>
                     </Button>
                 </Col>
             </Row>
             <Row>
-                <Col xs={12}>
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Description</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody className="table-group-divider">
+                <Col>
+                    <Row xs={2} sm={2} md={3} lg={4} className="g-4">
                         {products.map((product) => (
-                            <tr key={product.name}>
-                                <td>{product.name}</td>
-                                <td>{product.description}</td>
-                                <td>
-                                    <Button variant="danger" size="sm"
-                                            onClick={() => confirmDelete(product.name, product.id)}>
-                                        <FontAwesomeIcon icon="fa-solid fa-trash"/>
-                                    </Button>
-                                </td>
-                            </tr>
+                            <Col><ProductCard product={product} onProductDeleted={updateProducts}
+                                              key={product.id}/></Col>
                         ))}
-                        </tbody>
-                    </Table>
-                    <Modal show={showAdd} onHide={() => setShowAdd(false)}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Add Product</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form>
-                                <Form.Group>
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control type="input" onChange={(e) => setNewProductName(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control type="input"
-                                                  onChange={(e) => setNewProductDescription(e.target.value)}/>
-                                </Form.Group>
-                                <Button variant="outline-primary" onClick={handleSubmit}>Add</Button>
-                            </Form>
-                        </Modal.Body>
-                    </Modal>
-                    <Modal show={showDelete} onHide={() => setShowDelete(false)}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm deletion</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div>
-                                Do you really want to delete {productToDelete.name}?
-                            </div>
-                            <Button variant="danger" color="danger" onClick={performDelete}>Delete</Button>
-                        </Modal.Body>
-                    </Modal>
+                        <AddProductModal
+                            show={showAdd}
+                            onClickOut={() => setShowAdd(false)}
+                            onProductCreated={() => {
+                                setShowAdd(false);
+                                updateProducts();
+                            }}
+                        />
+                    </Row>
                 </Col>
             </Row>
         </Container>

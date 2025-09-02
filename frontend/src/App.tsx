@@ -2,6 +2,7 @@ import React from "react";
 import {Route, Routes} from 'react-router-dom';
 import {AuthProvider} from "./hooks/useAuth";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap';
 import {Layout} from "./components/Layout.js";
 
 import {ProtectedRoute} from "./components/ProtectedRoute";
